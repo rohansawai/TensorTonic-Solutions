@@ -6,12 +6,14 @@ def train_epoch(model: nn.Module, dataloader: torch.utils.data.DataLoader, crite
     Returns the mean batch loss as a Python float.
     """
     model.train()
-    loss_total = []
+    loss_total = 0.0
+    steps = 0
     for X, y in dataloader:
         optimizer.zero_grad()
         pred = model(X)
         loss = criterion(pred, y)
-        loss_total.append(loss.item())
+        loss_total+=loss.item()
+        steps+=1
         loss.backward()
-        optimizer.step()åç
-    return sum(loss_total)/len(loss_total)
+        optimizer.step()
+    return loss_total/steps
